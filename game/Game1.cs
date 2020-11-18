@@ -14,6 +14,7 @@ namespace GameDev_Project
 
         //Player
         private Texture2D idleTexture;
+        private Texture2D runTexture;
         Player player;
 
         public Game1()
@@ -61,12 +62,18 @@ namespace GameDev_Project
 
         private void LoadLevel()
         {
-            //Don't use 'Content.Load<Texture2D>()', because MGCB doesn't work on latest version of MacOS
-            FileStream fileStream = new FileStream("/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/idle.png", FileMode.Open);
+            //I load Textures with FileStream because MGCB doesn't work on latest version of MacOS
+            string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
+
+            FileStream fileStream = new FileStream(dir + "idle.png", FileMode.Open);
             idleTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "run.png", FileMode.Open);
+            runTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+
             fileStream.Dispose();
 
-            player = new Player(idleTexture);
+            player = new Player(idleTexture, runTexture);
         }
     }
 }

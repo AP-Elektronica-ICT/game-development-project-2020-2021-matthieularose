@@ -11,23 +11,28 @@ namespace GameDevProject.GameObjects
     public class Player : IGameObject
     {
         Texture2D idleTexture;
+        Texture2D runTexture;
 
         SpriteAnimation idleAnimation;
+        SpriteAnimation runAnimation;
 
-        public Player(Texture2D idle_texture)
+        public Player(Texture2D idle, Texture2D run)
         {
-            idleTexture = idle_texture;
+            idleTexture = idle;
+            runTexture = run;
+
             idleAnimation = new SpriteAnimation(95, 102, 12);
+            runAnimation = new SpriteAnimation(105, 66, 8);
         }
 
         public void Update(GameTime gameTime)
         {
-            idleAnimation.Update();
+            runAnimation.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (idleTexture != null)spriteBatch.Draw(idleTexture, new Vector2(10, 10), idleAnimation.currentFrame.sourceRectangle, Color.White);
+            if (runTexture != null)spriteBatch.Draw(runTexture, new Vector2(10, 10), runAnimation.currentFrame.sourceRectangle, Color.White);
         }
     }
 }
