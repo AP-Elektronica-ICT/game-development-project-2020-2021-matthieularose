@@ -20,8 +20,9 @@ namespace GameDevProject.GameObjects
         SpriteAnimation idleAnimation;
         SpriteAnimation runAnimation;
 
+        IReadInput inputReader;
 
-        public Player(Texture2D idle, Texture2D run)
+        public Player(Texture2D idle, Texture2D run, IReadInput reader)
         {
             idleTexture = idle;
             runTexture = run;
@@ -31,16 +32,24 @@ namespace GameDevProject.GameObjects
 
             texture = idleTexture;
             animation = idleAnimation;
+
+            inputReader = reader;
+
+            position = new Vector2(20, 350);
         }
 
         public void Update(GameTime gameTime)
         {
+            var direction = inputReader.ReadInput();
+            direction *= 4;
+            position += direction;
+
             animation.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (texture != null && animation != null) spriteBatch.Draw(texture, new Vector2(10, 10), animation.currentFrame.sourceRectangle, Color.White);
+            if (texture != null && animation != null) spriteBatch.Draw(texture, position, animation.currentFrame.sourceRectangle, Color.White);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using GameDevProject.GameObjects;
+using GameDevProject.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -59,10 +60,10 @@ namespace GameDev_Project
             base.Draw(gameTime);
         }
 
-
+        
         private void LoadLevel()
         {
-            //Load Textures with FileStream because MGCB doesn't work on latest version of MacOS
+            //Load Textures, MGCB Editor doesn't work on latest version of MacOS
             string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
 
             FileStream fileStream = new FileStream(dir + "idle.png", FileMode.Open);
@@ -73,7 +74,7 @@ namespace GameDev_Project
 
             fileStream.Dispose();
 
-            player = new Player(idleTexture, runTexture);
+            player = new Player(idleTexture, runTexture, new KeyboardInput());
         }
     }
 }
