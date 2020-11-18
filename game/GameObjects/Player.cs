@@ -8,8 +8,10 @@ using GameDevProject.Animation;
 
 namespace GameDevProject.GameObjects
 {
-    public class Player : IGameObject
+    public class Player : IGameObject, ITransform
     {
+        public Vector2 position { get; set; }
+
         Texture2D texture;
         Texture2D idleTexture;
         Texture2D runTexture;
@@ -17,6 +19,7 @@ namespace GameDevProject.GameObjects
         SpriteAnimation animation;
         SpriteAnimation idleAnimation;
         SpriteAnimation runAnimation;
+
 
         public Player(Texture2D idle, Texture2D run)
         {
@@ -26,8 +29,8 @@ namespace GameDevProject.GameObjects
             idleAnimation = new SpriteAnimation(95, 102, 12);
             runAnimation = new SpriteAnimation(105, 66, 8);
 
-            texture = runTexture;
-            animation = runAnimation;
+            texture = idleTexture;
+            animation = idleAnimation;
         }
 
         public void Update(GameTime gameTime)

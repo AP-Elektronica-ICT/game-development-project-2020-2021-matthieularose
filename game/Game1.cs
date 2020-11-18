@@ -62,7 +62,7 @@ namespace GameDev_Project
 
         private void LoadLevel()
         {
-            //I load Textures with FileStream because MGCB doesn't work on latest version of MacOS
+            //Load Textures with FileStream because MGCB doesn't work on latest version of MacOS
             string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
 
             FileStream fileStream = new FileStream(dir + "idle.png", FileMode.Open);
