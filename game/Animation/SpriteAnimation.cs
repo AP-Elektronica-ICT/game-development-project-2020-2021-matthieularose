@@ -12,6 +12,9 @@ namespace GameDevProject.Animation
         private List<AnimationFrame> frames;
 
         private int counter = 0;
+        private double frameMovement = 0;
+
+        private int fps = 10;
 
         public SpriteAnimation(int imgWidth, int imgHeight, int spriteCount)
         {
@@ -42,10 +45,16 @@ namespace GameDevProject.Animation
             return framesToReturn;
         }
         
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             currentFrame = frames[counter];
-            counter++;
+            frameMovement += currentFrame.sourceRectangle.Width * gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (frameMovement >= currentFrame.sourceRectangle.Width / fps)
+            {
+                counter++;
+                frameMovement = 0;
+            }
 
             if (counter >= frames.Count) counter = 0;
         }

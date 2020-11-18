@@ -10,9 +10,11 @@ namespace GameDevProject.GameObjects
 {
     public class Player : IGameObject
     {
+        Texture2D texture;
         Texture2D idleTexture;
         Texture2D runTexture;
 
+        SpriteAnimation animation;
         SpriteAnimation idleAnimation;
         SpriteAnimation runAnimation;
 
@@ -23,16 +25,19 @@ namespace GameDevProject.GameObjects
 
             idleAnimation = new SpriteAnimation(95, 102, 12);
             runAnimation = new SpriteAnimation(105, 66, 8);
+
+            texture = runTexture;
+            animation = runAnimation;
         }
 
         public void Update(GameTime gameTime)
         {
-            runAnimation.Update();
+            animation.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (runTexture != null)spriteBatch.Draw(runTexture, new Vector2(10, 10), runAnimation.currentFrame.sourceRectangle, Color.White);
+            if (texture != null && animation != null) spriteBatch.Draw(texture, new Vector2(10, 10), animation.currentFrame.sourceRectangle, Color.White);
         }
     }
 }
