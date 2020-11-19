@@ -14,6 +14,7 @@ namespace GameDevProject.Input
 
             if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.Q)) value = new Vector2(-1, 0);
             if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) value = new Vector2(1, 0);
+            if (state.IsKeyDown(Keys.Up) || state.IsKeyDown(Keys.Z)) value = new Vector2(0, -1);
 
             return value;
         }

@@ -22,8 +22,9 @@ namespace GameDevProject.GameObjects
         SpriteAnimation runAnimation;
 
         private IReadInput inputReader;
-
         private IMoveCommand runCommand = new RunCommand();
+        private IMoveCommand jumpCommand = new JumpCommand();
+
 
         public Player(Texture2D idle, Texture2D run, IReadInput reader)
         {
@@ -43,10 +44,13 @@ namespace GameDevProject.GameObjects
 
         public void Update(GameTime gameTime)
         {
+            //TODO: MoveManager
             var direction = inputReader.ReadInput();
-            Run(direction);
 
-            //Tijdelijk
+            if (direction.X != 0) runCommand.Execute(this, direction);
+            if (direction.Y != 0) jumpCommand.Execute(this, direction);
+
+            //TODO: AnimationManager + JumpAnimation
             if (direction.X != 0)
             {
                 texture = runTexture;
@@ -57,14 +61,8 @@ namespace GameDevProject.GameObjects
                 texture = idleTexture;
                 animation = idleAnimation;
             }
-            //TODO: Bool that gives last direction the player went and transforms idle-/runsprite in that direction
 
             animation.Update(gameTime);
-        }
-
-        private void Run(Vector2 dir)
-        {
-            runCommand.Execute(this, dir);
         }
 
         public void Draw(SpriteBatch spriteBatch)
