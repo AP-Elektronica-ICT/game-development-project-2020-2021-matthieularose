@@ -15,6 +15,7 @@ namespace GameDevProject.Commands
 
             //TODO: Implement Physics - Gravity
             //TODO: Implement jumplock => player can only jump again, when he is on the ground
+            //TODO: Use Acceleration instead of Velocity
         }
 
         public void Undo()

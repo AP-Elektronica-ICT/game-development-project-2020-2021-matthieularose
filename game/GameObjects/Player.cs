@@ -16,23 +16,27 @@ namespace GameDevProject.GameObjects
         Texture2D texture;
         Texture2D idleTexture;
         Texture2D runTexture;
+        Texture2D runTextureL;
 
         SpriteAnimation animation;
         SpriteAnimation idleAnimation;
         SpriteAnimation runAnimation;
+        SpriteAnimation runAnimationL;
 
         private IReadInput inputReader;
         private IMoveCommand runCommand = new RunCommand();
         private IMoveCommand jumpCommand = new JumpCommand();
 
 
-        public Player(Texture2D idle, Texture2D run, IReadInput reader)
+        public Player(Texture2D idle, Texture2D run, Texture2D runL, IReadInput reader)
         {
             idleTexture = idle;
             runTexture = run;
+            runTextureL = runL;
 
             idleAnimation = new SpriteAnimation(95, 102, 12);
             runAnimation = new SpriteAnimation(105, 66, 8);
+            runAnimationL = new SpriteAnimation(105, 66, 8);
 
             texture = idleTexture;
             animation = idleAnimation;
@@ -51,10 +55,15 @@ namespace GameDevProject.GameObjects
             if (direction.Y != 0) jumpCommand.Execute(this, direction);
 
             //TODO: AnimationManager + JumpAnimation
-            if (direction.X != 0)
+            if (direction.X > 0)
             {
                 texture = runTexture;
                 animation = runAnimation;
+            }
+            else if (direction.X < 0)
+            {
+                texture = runTextureL;
+                animation = runAnimationL;
             }
             else
             {
