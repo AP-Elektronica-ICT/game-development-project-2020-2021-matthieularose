@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using GameDevProject.Interfaces;
 using GameDevProject.Animation;
+using GameDevProject.Commands;
 
 namespace GameDevProject.GameObjects
 {
@@ -20,7 +21,9 @@ namespace GameDevProject.GameObjects
         SpriteAnimation idleAnimation;
         SpriteAnimation runAnimation;
 
-        IReadInput inputReader;
+        private IReadInput inputReader;
+
+        private IMoveCommand runCommand = new RunCommand();
 
         public Player(Texture2D idle, Texture2D run, IReadInput reader)
         {
@@ -41,10 +44,27 @@ namespace GameDevProject.GameObjects
         public void Update(GameTime gameTime)
         {
             var direction = inputReader.ReadInput();
-            direction *= 4;
-            position += direction;
+            Run(direction);
+
+            //Tijdelijk
+            if (direction.X != 0)
+            {
+                texture = runTexture;
+                animation = runAnimation;
+            }
+            else
+            {
+                texture = idleTexture;
+                animation = idleAnimation;
+            }
+            //TODO: Bool that gives last direction the player went and transforms idle-/runsprite in that direction
 
             animation.Update(gameTime);
+        }
+
+        private void Run(Vector2 dir)
+        {
+            runCommand.Execute(this, dir);
         }
 
         public void Draw(SpriteBatch spriteBatch)
