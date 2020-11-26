@@ -14,32 +14,17 @@ namespace GameDevProject.GameObjects
         public Vector2 position { get; set; }
 
         Texture2D texture;
-        Texture2D idleTexture;
-        Texture2D runTexture;
-        Texture2D runTextureL;
-
         SpriteAnimation animation;
-        SpriteAnimation idleAnimation;
-        SpriteAnimation runAnimation;
-        SpriteAnimation runAnimationL;
 
+        private IAnimationManager animationManager;
         private IReadInput inputReader;
         private IMoveCommand runCommand = new RunCommand();
         private IMoveCommand jumpCommand = new JumpCommand();
 
 
-        public Player(Texture2D idle, Texture2D run, Texture2D runL, IReadInput reader)
+        public Player(Texture2D idleR, Texture2D idleL, Texture2D runR, Texture2D runL, Texture2D jumpR, Texture2D jumpL, IReadInput reader)
         {
-            idleTexture = idle;
-            runTexture = run;
-            runTextureL = runL;
-
-            idleAnimation = new SpriteAnimation(95, 102, 12);
-            runAnimation = new SpriteAnimation(105, 66, 8);
-            runAnimationL = new SpriteAnimation(105, 66, 8);
-
-            texture = idleTexture;
-            animation = idleAnimation;
+            animationManager = new PlayerAnimationManager(idleR, idleL, runR, runL, jumpR, jumpL);
 
             inputReader = reader;
 
@@ -48,28 +33,16 @@ namespace GameDevProject.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            //TODO: MoveManager
+            //TODO: MoveManager?
             var direction = inputReader.ReadInput();
 
             if (direction.X != 0) runCommand.Execute(this, direction);
             if (direction.Y != 0) jumpCommand.Execute(this, direction);
 
-            //TODO: AnimationManager + JumpAnimation
-            if (direction.X > 0)
-            {
-                texture = runTexture;
-                animation = runAnimation;
-            }
-            else if (direction.X < 0)
-            {
-                texture = runTextureL;
-                animation = runAnimationL;
-            }
-            else
-            {
-                texture = idleTexture;
-                animation = idleAnimation;
-            }
+
+            animationManager.Update(direction);
+            texture = animationManager.texture;
+            animation = animationManager.animation;
 
             animation.Update(gameTime);
         }

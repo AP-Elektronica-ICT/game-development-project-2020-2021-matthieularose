@@ -14,7 +14,7 @@ namespace GameDevProject.Animation
         private int counter = 0;
         private double frameMovement = 0;
 
-        private int fps = 10;
+        private int fps = 12;
 
         public SpriteAnimation(int imgWidth, int imgHeight, int spriteCount)
         {
@@ -24,22 +24,11 @@ namespace GameDevProject.Animation
         public List<AnimationFrame> GetFrames(int imgWidth, int imgHeight, int frameCount)
         {
             List<AnimationFrame> framesToReturn = new List<AnimationFrame>();
+            int frameWidth = imgWidth / frameCount;
 
-            int frameCounter = 0;
-            int frameWidth = imgWidth / 5;
-            int rows = frameCount / 5;
-            if (frameCount % 5 != 0) rows++;
-            int frameHeight = imgHeight / rows;
-
-            for (int h = 0; h < imgHeight; h += frameHeight)
+            for (int w = 0; w < imgWidth; w += frameWidth)
             {
-                for (int w = 0; w < imgWidth; w += frameWidth)
-                {
-                    framesToReturn.Add(new AnimationFrame(new Rectangle(w, h, frameWidth, frameHeight)));
-                    frameCounter++;
-
-                    if (frameCounter >= frameCount) return framesToReturn;
-                }
+                framesToReturn.Add(new AnimationFrame(new Rectangle(w, 0, frameWidth, imgHeight)));
             }
 
             return framesToReturn;

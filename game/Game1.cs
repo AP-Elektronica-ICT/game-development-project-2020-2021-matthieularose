@@ -14,8 +14,13 @@ namespace GameDev_Project
         private SpriteBatch _spriteBatch;
 
         //Player
-        private Texture2D idleTexture;
-        private Texture2D runTexture;
+        private Texture2D idleTextureR;
+        private Texture2D idleTextureL;
+        private Texture2D runTextureR;
+        private Texture2D runTextureL;
+        private Texture2D jumpTextureR;
+        private Texture2D jumpTextureL;
+
         Player player;
 
         public Game1()
@@ -66,15 +71,30 @@ namespace GameDev_Project
             //Load Textures, MGCB Editor doesn't work on latest version of MacOS
             string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
 
-            FileStream fileStream = new FileStream(dir + "idle.png", FileMode.Open);
-            idleTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            FileStream fileStream = new FileStream(dir + "idleRight.png", FileMode.Open);
+            idleTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "run.png", FileMode.Open);
-            runTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "idleLeft.png", FileMode.Open);
+            idleTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "runRight.png", FileMode.Open);
+            runTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "runLeft.png", FileMode.Open);
+            runTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "jumpRight.png", FileMode.Open);
+            jumpTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "jumpLeft.png", FileMode.Open);
+            jumpTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
+
+            fileStream = new FileStream(dir + "jumpLeft.png", FileMode.Open);
+            jumpTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
             fileStream.Dispose();
 
-            player = new Player(idleTexture, runTexture, new KeyboardInput());
+            player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
         }
     }
 }
