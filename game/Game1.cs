@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using GameDevProject.Animation;
 using GameDevProject.GameObjects;
 using GameDevProject.Input;
+using GameDevProject.LevelDesign;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +15,7 @@ namespace GameDev_Project
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        //Player
+        /*---TEXTURES---*/
         private Texture2D idleTextureR;
         private Texture2D idleTextureL;
         private Texture2D runTextureR;
@@ -21,7 +23,12 @@ namespace GameDev_Project
         private Texture2D jumpTextureR;
         private Texture2D jumpTextureL;
 
+        private Texture2D tileTexture;
+
+        /*---GAMEOBJECTS---*/
+        Level level;
         Player player;
+
 
         public Game1()
         {
@@ -32,6 +39,14 @@ namespace GameDev_Project
 
         protected override void Initialize()
         {
+            GetTextures();
+            
+            level = new Level(Content, tileTexture);
+            level.CreateWorld();
+
+            player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
+            player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
+
             base.Initialize();
         }
 
@@ -39,7 +54,6 @@ namespace GameDev_Project
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            LoadLevel();
         }
 
         protected override void Update(GameTime gameTime)
@@ -58,6 +72,8 @@ namespace GameDev_Project
 
             _spriteBatch.Begin();
 
+            level.DrawWorld(_spriteBatch);
+
             player.Draw(_spriteBatch);
 
             _spriteBatch.End();
@@ -66,9 +82,9 @@ namespace GameDev_Project
         }
 
         
-        private void LoadLevel()
+        private void GetTextures()
         {
-            //Load Textures, MGCB Editor doesn't work on latest version of MacOS
+            //MGCB Editor doesn't work on latest version of MacOS
             string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
 
             FileStream fileStream = new FileStream(dir + "idleRight.png", FileMode.Open);
@@ -92,9 +108,10 @@ namespace GameDev_Project
             fileStream = new FileStream(dir + "jumpLeft.png", FileMode.Open);
             jumpTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream.Dispose();
+            fileStream = new FileStream(dir + "tileSheet.png", FileMode.Open);
+            tileTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
+            fileStream.Dispose();
         }
     }
 }

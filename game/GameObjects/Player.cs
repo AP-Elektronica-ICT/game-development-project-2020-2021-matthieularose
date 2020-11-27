@@ -16,7 +16,7 @@ namespace GameDevProject.GameObjects
         Texture2D texture;
         SpriteAnimation animation;
 
-        private IAnimationManager animationManager;
+        public IAnimationManager animationManager;
         private IReadInput inputReader;
         private IMoveCommand runCommand = new RunCommand();
         private IMoveCommand jumpCommand = new JumpCommand();
@@ -24,7 +24,7 @@ namespace GameDevProject.GameObjects
 
         public Player(Texture2D idleR, Texture2D idleL, Texture2D runR, Texture2D runL, Texture2D jumpR, Texture2D jumpL, IReadInput reader)
         {
-            animationManager = new PlayerAnimationManager(idleR, idleL, runR, runL, jumpR, jumpL);
+            //animationManager = new PlayerAnimationManager(idleR, idleL, runR, runL, jumpR, jumpL);
 
             inputReader = reader;
 
