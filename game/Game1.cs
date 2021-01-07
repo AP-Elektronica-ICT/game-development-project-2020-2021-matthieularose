@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using GameDevProject.Animation;
+using GameDevProject.Background;
 using GameDevProject.Collision;
 using GameDevProject.GameObjects;
 using GameDevProject.GameObjects.World;
@@ -31,11 +32,11 @@ namespace GameDev_Project
 
         private Texture2D tileTexture;
 
-        private Texture2D plx1;
-        private Texture2D plx2;
-        private Texture2D plx3;
-        private Texture2D plx4;
-        private Texture2D plx5;
+        private List<Texture2D> backgroundTextures = new List<Texture2D>();
+        //private Texture2D plx2;
+        //private Texture2D plx3;
+        //private Texture2D plx4;
+        //private Texture2D plx5;
 
         /*---GAMEOBJECTS---*/
         Level level;
@@ -45,6 +46,9 @@ namespace GameDev_Project
         /*---CAMERA---*/
         int cameraOffsetX = 150;
         //int cameraOffsetY = 350;
+
+        /*---BACKGROUND---*/
+        ParallaxBackground background;
 
         public Game1()
         {
@@ -56,9 +60,12 @@ namespace GameDev_Project
         protected override void Initialize()
         {
             GetTextures();
+
+            background = new ParallaxBackground(backgroundTextures);
+            background.Initialize();
             
             level = new Level(Content, tileTexture);
-            level.Create();
+            level.Initialize();
 
             player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
             player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
@@ -109,10 +116,9 @@ namespace GameDev_Project
         {
             GraphicsDevice.Clear(Color.White);
 
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Texture,
-                transformMatrix: Matrix.CreateTranslation(- player.position.X + cameraOffsetX, 0, 0));
+            _spriteBatch.Begin(transformMatrix: Matrix.CreateTranslation(- player.position.X + cameraOffsetX, 0, 0));
 
-            drawBackground(); //-> background.Draw()
+            background.Draw(_spriteBatch);
 
             level.Draw(_spriteBatch);
 
@@ -157,27 +163,21 @@ namespace GameDev_Project
 
             //Parallax Backgrounds
             fileStream = new FileStream(dir + "backgrounds/plx-1.png", FileMode.Open);
-            plx1 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
+
             fileStream = new FileStream(dir + "backgrounds/plx-2.png", FileMode.Open);
-            plx2 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
+
             fileStream = new FileStream(dir + "backgrounds/plx-3.png", FileMode.Open);
-            plx3 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
+
             fileStream = new FileStream(dir + "backgrounds/plx-4.png", FileMode.Open);
-            plx4 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
+
             fileStream = new FileStream(dir + "backgrounds/plx-5.png", FileMode.Open);
-            plx5 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
 
             fileStream.Dispose();
-        }
-
-        //Temporary
-        public void drawBackground()
-        {
-            _spriteBatch.Draw(plx1, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(plx2, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(plx3, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(plx4, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(plx5, new Vector2(0, 0), Color.White);
         }
     }
 }
