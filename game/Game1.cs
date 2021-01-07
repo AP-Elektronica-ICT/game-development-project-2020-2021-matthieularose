@@ -31,6 +31,12 @@ namespace GameDev_Project
 
         private Texture2D tileTexture;
 
+        private Texture2D plx1;
+        private Texture2D plx2;
+        private Texture2D plx3;
+        private Texture2D plx4;
+        private Texture2D plx5;
+
         /*---GAMEOBJECTS---*/
         Level level;
         Player player;
@@ -101,10 +107,12 @@ namespace GameDev_Project
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin(sortMode: SpriteSortMode.Texture,
                 transformMatrix: Matrix.CreateTranslation(- player.position.X + cameraOffsetX, 0, 0));
+
+            drawBackground(); //-> background.Draw()
 
             level.Draw(_spriteBatch);
 
@@ -119,48 +127,73 @@ namespace GameDev_Project
         private void GetTextures()
         {
             //MGCB Editor doesn't work on latest version of MacOS
-            string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/sprites/";
+            string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/";
 
-            FileStream fileStream = new FileStream(dir + "idleRight.png", FileMode.Open);
+            //Player
+            FileStream fileStream = new FileStream(dir + "sprites/idleRight.png", FileMode.Open);
             idleTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "idleLeft.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/idleLeft.png", FileMode.Open);
             idleTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "runRight.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/runRight.png", FileMode.Open);
             runTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "runLeft.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/runLeft.png", FileMode.Open);
             runTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "jumpRight.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/jumpRight.png", FileMode.Open);
             jumpTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "jumpLeft.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/jumpLeft.png", FileMode.Open);
             jumpTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "jumpLeft.png", FileMode.Open);
+            fileStream = new FileStream(dir + "sprites/jumpLeft.png", FileMode.Open);
             jumpTextureL = Texture2D.FromStream(GraphicsDevice, fileStream);
 
-            fileStream = new FileStream(dir + "tileSheet.png", FileMode.Open);
+            //Tilesets
+            fileStream = new FileStream(dir + "tilesets/tileset1.png", FileMode.Open);
             tileTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
 
+            //Parallax Backgrounds
+            fileStream = new FileStream(dir + "backgrounds/plx-1.png", FileMode.Open);
+            plx1 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "backgrounds/plx-2.png", FileMode.Open);
+            plx2 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "backgrounds/plx-3.png", FileMode.Open);
+            plx3 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "backgrounds/plx-4.png", FileMode.Open);
+            plx4 = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "backgrounds/plx-5.png", FileMode.Open);
+            plx5 = Texture2D.FromStream(GraphicsDevice, fileStream);
 
             fileStream.Dispose();
+        }
+
+        //Temporary
+        public void drawBackground()
+        {
+            _spriteBatch.Draw(plx1, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(plx2, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(plx3, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(plx4, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(plx5, new Vector2(0, 0), Color.White);
         }
     }
 }
 
 /*TODO:
  * 
- * Gravity?
- * 2 Levels
+ * Physics
+ * 2de Level
  * Menuscherm
  * Player death -> position.Y < 0
  * Game Over Scherm
  * TextureLoader
- * TextureManager?
  * CollisionDetection Class?
  * JSONParser?
+ * Background klasse
+ * root dir veranderen
+ * Sprite (Devider?)
  * 
  */
