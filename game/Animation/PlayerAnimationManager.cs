@@ -24,7 +24,6 @@ namespace GameDevProject.Animation
         SpriteAnimation jumpAnimation = new SpriteAnimation(34, 68, 1);
 
 
-
         public PlayerAnimationManager(Texture2D idleR, Texture2D idleL, Texture2D runR, Texture2D runL, Texture2D jumpR, Texture2D jumpL)
         {
             idleTextureR = idleR;
@@ -33,8 +32,6 @@ namespace GameDevProject.Animation
             runTextureL = runL;
             jumpTextureR = jumpR;
             jumpTextureL = jumpL;
-
-
         }
 
         public void Update(Vector2 direction)
