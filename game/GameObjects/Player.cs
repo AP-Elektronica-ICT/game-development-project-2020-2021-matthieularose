@@ -6,6 +6,7 @@ using System.Diagnostics;
 using GameDevProject.Interfaces;
 using GameDevProject.Animation;
 using GameDevProject.Commands;
+using GameDevProject.Collision;
 
 namespace GameDevProject.GameObjects
 {
@@ -22,6 +23,7 @@ namespace GameDevProject.GameObjects
         private IMoveCommand runCommand = new RunCommand();
         private IMoveCommand jumpCommand = new JumpCommand();
 
+        public Collider collider;
 
         public Player(Texture2D idleR, Texture2D idleL, Texture2D runR, Texture2D runL, Texture2D jumpR, Texture2D jumpL, IReadInput reader)
         {
@@ -32,6 +34,8 @@ namespace GameDevProject.GameObjects
             position = new Vector2(20, 200);
 
             CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64);
+
+            collider = new Collider(this);
         }
 
         public void Update(GameTime gameTime)
@@ -58,7 +62,7 @@ namespace GameDevProject.GameObjects
         //Tijdelijk?
         public void Fall()
         {
-
+            jumpCommand.Execute(this, new Vector2(0, 0.001f));
         }
     }
 }

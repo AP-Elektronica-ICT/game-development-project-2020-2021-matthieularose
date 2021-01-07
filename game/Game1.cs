@@ -20,6 +20,7 @@ namespace GameDev_Project
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        //CollisionDetector collisionDetector;
         CollisionManager collisionManager;
 
         /*---TEXTURES---*/
@@ -70,8 +71,8 @@ namespace GameDev_Project
             player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
             player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
 
-            collisionManager = new CollisionManager();
-
+            //collisionDetector = new CollisionDetector();
+            collisionManager = new CollisionManager(player, level.tiles);
 
             base.Initialize();
         }
@@ -87,25 +88,7 @@ namespace GameDev_Project
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach (Tile tile in level.tiles)
-            {
-                if (collisionManager.CollisionDetection(player.CollisionRectangle, tile.CollisionRectangle))
-                {
-                    if (tile.position.Y > player.position.Y)
-                    {
-                        player.position = new Vector2(player.position.X, tile.position.Y - 64);
-                    }
-                    else
-                    {
-                        player.position = new Vector2(player.position.X, tile.position.Y + 32);
-                    }
-                }
-                else
-                {
-                    //player.position -= new Vector2(0, -0.01f);
-                    player.Fall();
-                }
-            }
+            collisionManager.Update();
 
             player.Update(gameTime);
 
@@ -184,16 +167,17 @@ namespace GameDev_Project
 
 /*TODO:
  * 
+ * Collision Manager
  * Physics
  * 2de Level
  * Menuscherm
  * Player death -> position.Y < 0
- * Game Over Scherm
+ * Game-Over Scherm
  * TextureLoader
  * CollisionDetection Class?
  * JSONParser?
- * Background klasse
  * root dir veranderen
  * Sprite (Devider?)
+ * IGameObject verwijderen?
  * 
  */

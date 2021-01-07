@@ -1,14 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using GameDevProject.GameObjects;
+using GameDevProject.GameObjects.World;
 using Microsoft.Xna.Framework;
 
 namespace GameDevProject.Collision
 {
     public class CollisionManager
     {
-        public bool CollisionDetection(Rectangle rect1, Rectangle rect2)
+        private CollisionDetector collisionDetector = new CollisionDetector();
+
+        Player Player;
+        List<Tile> Tiles;
+
+        public CollisionManager(Player player, List<Tile> tiles)
         {
-            if (rect1.Intersects(rect2)) return true;
-            return false;
+            Player = player;
+            Tiles = tiles;
+        }
+
+        public void Update()
+        {
+            foreach(Tile tile in Tiles)
+            {
+                if (collisionDetector.collision(Player.CollisionRectangle, tile.CollisionRectangle))
+                {
+                    Player.collider.OnCollision(tile);
+                }
+            }
         }
     }
 }
