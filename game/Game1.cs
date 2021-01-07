@@ -34,10 +34,6 @@ namespace GameDev_Project
         private Texture2D tileTexture;
 
         private List<Texture2D> backgroundTextures = new List<Texture2D>();
-        //private Texture2D plx2;
-        //private Texture2D plx3;
-        //private Texture2D plx4;
-        //private Texture2D plx5;
 
         /*---GAMEOBJECTS---*/
         Level level;
@@ -167,7 +163,6 @@ namespace GameDev_Project
 
 /*TODO:
  * 
- * Collision Manager
  * Physics
  * 2de Level
  * Menuscherm
@@ -177,7 +172,7 @@ namespace GameDev_Project
  * CollisionDetection Class?
  * JSONParser?
  * root dir veranderen
- * Sprite (Devider?)
+ * Sprite (Devider?) Splitter?
  * IGameObject verwijderen?
  * 
  */
