@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using GameDevProject.Collision;
+using GameDevProject.GameObjects;
 using GameDevProject.GameObjects.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -13,15 +16,19 @@ namespace GameDevProject.LevelDesign
         public Texture2D texture;
         public List<Rectangle> tileTypes = new List<Rectangle>();
 
-        public byte[,] tileArray = new Byte[,]
+        public int levelWidth = 800;
+        public int levelHeight = 480;
+
+        public byte[] tileArray = new Byte[]
         {
-            {0,0,0,0,0,0 },
-            {0,0,0,0,0,0 },
-            {2,2,3,0,1,2 },
-            {5,5,6,0,4,5 },
+            8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 9, 0, 0, 7, 9, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 9, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 9, 0, 0, 0, 0, 0, 0, 0, 7, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 1, 2, 3, 0, 0, 4, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 6, 0, 0, 0, 0, 4, 5, 6, 0, 0, 4, 5, 5, 2, 2, 2, 2, 2, 2, 2, 3, 0, 0, 4, 5, 6, 0, 0, 0, 0, 4, 5, 6, 0, 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 0, 0, 4, 5, 6, 0, 0, 0, 0, 4, 5, 6, 0, 0, 4, 5, 5
         };
 
-        private Tile[,] tArray = new Tile[4, 6];
+        public Tile[,] tArray = new Tile[4, 6];
+
+        public List<Tile> tiles = new List<Tile>();
+
+        //public Tile t;
 
         private ContentManager content;
 
@@ -30,42 +37,31 @@ namespace GameDevProject.LevelDesign
             this.content = content;
             texture = text;
             GetTileSprites(96, 96, 32, 32);
-            //InitializeContent();
-        }
-
-        private void InitializeContent()
-        {
-            //texture = content.Load<Texture2D>("");
         }
 
 
-        public void CreateWorld()
+        public void Create()
         {
-            for (int x = 0; x < 4; x++)
+            int count = 0;
+            for (int y = 0; y < levelHeight; y += 32)
             {
-                for (int y = 0; y < 6; y++)
+                for (int x = 0; x < levelWidth; x += 32)
                 {
-                    //if (tileArray[x, y] != 0)
-                    //{
-                        tArray[x, y] = new Tile(texture, new Vector2(y * 32, x * 32), tileTypes[tileArray[x, y]]);
-                    //}
-                }
-            }
-        }
-
-        public void DrawWorld(SpriteBatch spritebatch)
-        {
-            for (int x = 0; x < 4; x++)
-            {
-                for (int y = 0; y < 6; y++)
-                {
-                    if (tArray[x, y] != null)
+                    if (tileArray[count] != 0)
                     {
-                        tArray[x, y].Draw(spritebatch);
+                        tiles.Add(new Tile(texture, new Vector2(x, y), tileTypes[tileArray[count]]));
                     }
+                    count++;
                 }
             }
+        }
 
+        public void Draw(SpriteBatch spritebatch)
+        {
+            foreach (Tile tile in tiles)
+            {
+                tile.Draw(spritebatch);
+            }
         }
 
         //Temporarily

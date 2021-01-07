@@ -5,6 +5,6 @@ namespace GameDevProject.Interfaces
 {
     public interface ICollision
     {
-        Rectangle collidingRect { get; set; }
+        public Rectangle CollisionRectangle { get; set; }
     }
 }

@@ -9,9 +9,10 @@ using GameDevProject.Commands;
 
 namespace GameDevProject.GameObjects
 {
-    public class Player : IGameObject, ITransform
+    public class Player : IGameObject, ITransform, ICollision
     {
         public Vector2 position { get; set; }
+        public Rectangle CollisionRectangle { get; set; }
 
         Texture2D texture;
         SpriteAnimation animation;
@@ -28,17 +29,19 @@ namespace GameDevProject.GameObjects
 
             inputReader = reader;
 
-            position = new Vector2(20, 350);
+            position = new Vector2(20, 200);
+
+            CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64);
         }
 
         public void Update(GameTime gameTime)
         {
-            //TODO: MoveManager?
             var direction = inputReader.ReadInput();
 
             if (direction.X != 0) runCommand.Execute(this, direction);
             if (direction.Y != 0) jumpCommand.Execute(this, direction);
 
+            CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64); //Mischien andere manier dan telkens nieuwe Rectangle?
 
             animationManager.Update(direction);
             texture = animationManager.texture;
@@ -50,6 +53,12 @@ namespace GameDevProject.GameObjects
         public void Draw(SpriteBatch spriteBatch)
         {
             if (texture != null && animation != null) spriteBatch.Draw(texture, position, animation.currentFrame.sourceRectangle, Color.White);
+        }
+
+        //Tijdelijk?
+        public void Fall()
+        {
+
         }
     }
 }

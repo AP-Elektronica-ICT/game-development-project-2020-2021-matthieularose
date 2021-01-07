@@ -1,7 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using GameDevProject.Animation;
+using GameDevProject.Collision;
 using GameDevProject.GameObjects;
+using GameDevProject.GameObjects.World;
 using GameDevProject.Input;
 using GameDevProject.LevelDesign;
 using Microsoft.Xna.Framework;
@@ -14,6 +18,8 @@ namespace GameDev_Project
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        CollisionManager collisionManager;
 
         /*---TEXTURES---*/
         private Texture2D idleTextureR;
@@ -28,7 +34,7 @@ namespace GameDev_Project
         /*---GAMEOBJECTS---*/
         Level level;
         Player player;
-
+        //Tile tile;
 
         public Game1()
         {
@@ -42,10 +48,14 @@ namespace GameDev_Project
             GetTextures();
             
             level = new Level(Content, tileTexture);
-            level.CreateWorld();
+            level.Create();
 
             player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
             player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
+
+            collisionManager = new CollisionManager();
+
+            //tile = new Tile(tileTexture, new Vector2(0, 384));
 
             base.Initialize();
         }
@@ -61,6 +71,19 @@ namespace GameDev_Project
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            foreach (Tile tile in level.tiles)
+            {
+                if (collisionManager.CollisionDetection(player.CollisionRectangle, tile.CollisionRectangle))
+                {
+                    Debug.WriteLine("a");
+                }
+                else
+                {
+                    //FALL
+                    
+                }
+            }
+
             player.Update(gameTime);
 
             base.Update(gameTime);
@@ -72,7 +95,7 @@ namespace GameDev_Project
 
             _spriteBatch.Begin();
 
-            level.DrawWorld(_spriteBatch);
+            level.Draw(_spriteBatch);
 
             player.Draw(_spriteBatch);
 
@@ -110,6 +133,7 @@ namespace GameDev_Project
 
             fileStream = new FileStream(dir + "tileSheet.png", FileMode.Open);
             tileTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+
 
             fileStream.Dispose();
         }
