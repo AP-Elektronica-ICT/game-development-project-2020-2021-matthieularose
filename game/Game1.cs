@@ -36,6 +36,10 @@ namespace GameDev_Project
         Player player;
         //Tile tile;
 
+        /*---CAMERA---*/
+        int cameraOffsetX = 150;
+        //int cameraOffsetY = 350;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -55,7 +59,6 @@ namespace GameDev_Project
 
             collisionManager = new CollisionManager();
 
-            //tile = new Tile(tileTexture, new Vector2(0, 384));
 
             base.Initialize();
         }
@@ -75,12 +78,19 @@ namespace GameDev_Project
             {
                 if (collisionManager.CollisionDetection(player.CollisionRectangle, tile.CollisionRectangle))
                 {
-                    Debug.WriteLine("a");
+                    if (tile.position.Y > player.position.Y)
+                    {
+                        player.position = new Vector2(player.position.X, tile.position.Y - 64);
+                    }
+                    else
+                    {
+                        player.position = new Vector2(player.position.X, tile.position.Y + 32);
+                    }
                 }
                 else
                 {
-                    //FALL
-                    
+                    //player.position -= new Vector2(0, -0.01f);
+                    player.Fall();
                 }
             }
 
@@ -93,7 +103,8 @@ namespace GameDev_Project
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Texture,
+                transformMatrix: Matrix.CreateTranslation(- player.position.X + cameraOffsetX, 0, 0));
 
             level.Draw(_spriteBatch);
 
@@ -139,3 +150,17 @@ namespace GameDev_Project
         }
     }
 }
+
+/*TODO:
+ * 
+ * Gravity?
+ * 2 Levels
+ * Menuscherm
+ * Player death -> position.Y < 0
+ * Game Over Scherm
+ * TextureLoader
+ * TextureManager?
+ * CollisionDetection Class?
+ * JSONParser?
+ * 
+ */
