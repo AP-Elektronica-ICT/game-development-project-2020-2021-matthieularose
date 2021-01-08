@@ -13,6 +13,11 @@ namespace GameDevProject.Commands
             direction *= velocity;
             transform.position += direction;
         }
+        public void Execute(ITransform transform, Vector2 direction, GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void Undo()
         {

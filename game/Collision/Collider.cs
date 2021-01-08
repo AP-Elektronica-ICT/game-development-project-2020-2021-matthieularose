@@ -19,6 +19,7 @@ namespace GameDevProject.Collision
             if (tile.position.Y > Player.position.Y)
             {
                 Player.position = new Vector2(Player.position.X, tile.position.Y - 64);
+                Player.isTouchingGround = true;
             }
             else if (tile.position.Y < Player.position.Y)
             { 

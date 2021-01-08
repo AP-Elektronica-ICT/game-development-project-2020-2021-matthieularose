@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDevProject.Animation
 {
-    //Animation was already namespace => SpriteAnimation = class name
     public class SpriteAnimation
     {
         public AnimationFrame currentFrame { get; set; }

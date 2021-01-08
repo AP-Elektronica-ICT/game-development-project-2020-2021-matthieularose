@@ -6,15 +6,27 @@ namespace GameDevProject.Commands
 {
     public class JumpCommand : IMoveCommand
     {
-        private Vector2 velocity = new Vector2(0, 7);
+        private Vector2 velocity = new Vector2(0, 15);
+        private Vector2 gravity = new Vector2(0, 9.8f);
 
         public void Execute(ITransform transform, Vector2 direction)
         {
-            direction *= velocity;
-            transform.position += direction;
+            throw new NotImplementedException();
+        }
+        public void Execute(ITransform transform, Vector2 direction, GameTime gameTime)
+        {
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            //TODO: Implement Physics - Gravity
-            //TODO: Implement jumplock => player can only jump again, when he is on the ground
+            //if (elapsedTime > 30) return;
+            //direction += acceleration * elapsedTime / 7;
+            //transform.position -= direction;
+            //velocity *= elapsedTime;
+            //velocity *= elapsedTime;
+            transform.position -= velocity * elapsedTime;
+
+            //velocity += gravity * elapsedTime;
+            //transform.position += velocity * elapsedTime;
+
         }
 
         public void Undo()

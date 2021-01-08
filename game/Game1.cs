@@ -64,10 +64,9 @@ namespace GameDev_Project
             level = new Level(Content, tileTexture);
             level.Initialize();
 
-            player = new Player(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL, new KeyboardInput());
+            player = new Player(new KeyboardInput());
             player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
 
-            //collisionDetector = new CollisionDetector();
             collisionManager = new CollisionManager(player, level.tiles);
 
             base.Initialize();
@@ -163,16 +162,14 @@ namespace GameDev_Project
 
 /*TODO:
  * 
- * Physics
  * 2de Level
  * Menuscherm
  * Player death -> position.Y < 0
- * Game-Over Scherm
+ * GameOver Scherm
  * TextureLoader
- * CollisionDetection Class?
- * JSONParser?
+ * JSONParser + levels in JSON files opslaan
  * root dir veranderen
- * Sprite (Devider?) Splitter?
+ * SpriteLoader? (verdeeld sprites in frames)
  * IGameObject verwijderen?
  * 
  */
