@@ -13,6 +13,19 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+/*--------------------------------------------------------------------
+ * Jump en gravity zijn nog niet af
+ * Nog geen Menuscherm, game over scherm,...
+ * Van de klasse structuur ben ik ook nog niet helemaal tevreden
+ * en ik moet er ook nog voor zorgen dat de speler enkel op de bovenste tiles kan lopen
+ * 
+ * Zal dit tegen het mondeling examen nog afmaken en verbeteren
+ * 
+ * Om de textures te laden, moet u de directory path van de content nog even aanpassen (in de GetTextures-functie onderaan dit bestand).
+ * Ik moest dit zo doen, omdat de MGCB Editor niet werkt voor de laatste versie van MacOS.
+ * 
+ */
+
 namespace GameDev_Project
 {
     public class Game1 : Game
@@ -38,7 +51,6 @@ namespace GameDev_Project
         /*---GAMEOBJECTS---*/
         Level level;
         Player player;
-        //Tile tile;
 
         /*---CAMERA---*/
         int cameraOffsetX = 150;
@@ -98,9 +110,9 @@ namespace GameDev_Project
 
             background.Draw(_spriteBatch);
 
-            level.Draw(_spriteBatch);
-
             player.Draw(_spriteBatch);
+
+            level.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
@@ -162,7 +174,6 @@ namespace GameDev_Project
 
 /*TODO:
  * 
- * 2de Level
  * Menuscherm
  * Player death -> position.Y < 0
  * GameOver Scherm
@@ -171,5 +182,10 @@ namespace GameDev_Project
  * root dir veranderen
  * SpriteLoader? (verdeeld sprites in frames)
  * IGameObject verwijderen?
+ * Parallax
+ * Jump en val animatie aanpassen
+ * Tileset met tegengestelde hoeken
+ * collision bug - player kan op alle tiles lopen ipv enkel de bovenste rij
+ * Sound
  * 
  */

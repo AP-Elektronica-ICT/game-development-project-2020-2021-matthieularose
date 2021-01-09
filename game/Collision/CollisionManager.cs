@@ -21,13 +21,29 @@ namespace GameDevProject.Collision
 
         public void Update()
         {
-            foreach(Tile tile in Tiles)
+            Tile tile = GetTile();
+
+            if (tile == null)
+            {
+                Player.collider.OnCollisionExit();
+            }
+            else if (tile != null)
+            {
+                Player.collider.OnCollisionEnter(tile);
+            }
+        }
+
+        public Tile GetTile() //Door muren omdat enkel de eerste colliding tile returnt => list
+        {
+            foreach (Tile tile in Tiles)
             {
                 if (collisionDetector.collision(Player.CollisionRectangle, tile.CollisionRectangle))
                 {
-                    Player.collider.OnCollision(tile);
+                    return tile;
+                    //Player.collider.OnCollisionEnter(tile);
                 }
             }
+            return null;
         }
     }
 }
