@@ -76,10 +76,10 @@ namespace GameDev_Project
             level = new Level(Content, tileTexture);
             level.Initialize();
 
-            player = new Player(new KeyboardInput());
+            player = new Player(new KeyboardInput(), level.tiles);
             player.animationManager = new PlayerAnimationManager(idleTextureR, idleTextureL, runTextureR, runTextureL, jumpTextureR, jumpTextureL);
 
-            collisionManager = new CollisionManager(player, level.tiles);
+            //collisionManager = new CollisionManager(player, level.tiles);
 
             base.Initialize();
         }
@@ -95,7 +95,7 @@ namespace GameDev_Project
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            collisionManager.Update();
+            //collisionManager.Update();
 
             player.Update(gameTime);
 
@@ -187,5 +187,6 @@ namespace GameDev_Project
  * Tileset met tegengestelde hoeken
  * collision bug - player kan op alle tiles lopen ipv enkel de bovenste rij
  * Sound
+ * Wanneer ja al springend van richting veranderd, veranderd animatie niet mee
  * 
  */

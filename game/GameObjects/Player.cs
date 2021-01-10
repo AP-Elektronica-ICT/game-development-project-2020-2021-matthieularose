@@ -8,6 +8,8 @@ using GameDevProject.Animation;
 using GameDevProject.Commands;
 using GameDevProject.Collision;
 using GameDevProject.Physics;
+using System.Collections.Generic;
+using GameDevProject.GameObjects.World;
 
 namespace GameDevProject.GameObjects
 {
@@ -34,26 +36,39 @@ namespace GameDevProject.GameObjects
         public Vector2 runVelocity = new Vector2(4, 0);
         public Vector2 jumpVelocity = new Vector2(0, 10);
         public Vector2 gravVelocity = new Vector2(0, 10);
+        public Vector2 gravVelocityPointer = new Vector2(0, 10);
+
         Vector2 grav = new Vector2(0, 9.81f);
 
+        float elapsedTime;
         //DateTime startTime;
         //TimeSpan timer;
         //float time;
 
-        public Player(IReadInput reader)
+        List<Tile> Tiles;
+        CollisionDetector collisionDetector = new CollisionDetector();
+        Tile floorTile;
+
+        public Player(IReadInput reader, List<Tile> tiles)
         {
             inputReader = reader;
 
-            position = new Vector2(200, 350);
+            position = new Vector2(300, 200);
+
+            //collisionManager = new CollisionManager(this, level.tiles);
 
             CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64);
 
-            collider = new Collider(this);
+            Tiles = tiles;
+
+            //collider = new Collider(this);
         }
 
         public void Update(GameTime gameTime)
         {
-            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100;
+            
+
+            elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100;
 
             
 
@@ -69,28 +84,44 @@ namespace GameDevProject.GameObjects
             //}
 
             //gravity.Pull(this, gameTime);
-            if (isTouchingGround)
-            {
-                //startTime = DateTime.Now;
-                gravVelocity = new Vector2(0, 10);
-                elapsedTime = 0;
-                //touchChange = !touchChange;
-            }
-            //else
-            //{
-            //    gravVelocity += grav * elapsedTime;
-            //    position += gravVelocity * elapsedTime;
-            //}
 
-            if (direction.X != 0)
-            {
-                position += direction * runVelocity;
-            }
-            if (direction.Y < 0)
-            {
-                position += direction * jumpVelocity;
-                isTouchingGround = false;
-            }
+
+            //if (direction != new Vector2(0,0))
+            //{
+                Vector2 nextPosition = position;
+                if (direction.X != 0)
+                {
+                    nextPosition += (direction * runVelocity);
+
+                    //position += direction * runVelocity;
+                }
+                if (direction.Y != 0) //<
+                {
+                    nextPosition += (direction * jumpVelocity);
+
+                    //position += direction * jumpVelocity;
+                    //isTouchingGround = false;
+                }
+
+            gravVelocity += grav * elapsedTime;
+            nextPosition += gravVelocity * elapsedTime;
+
+
+            if (GetCollidingTiles(new Rectangle((int)nextPosition.X, (int)nextPosition.Y, 32, 64)).Count > 0)
+                {
+                    //collider.OnCollisionEnter();
+                    if (floorTile != null) position = new Vector2(nextPosition.X, floorTile.position.Y - 64);
+                    gravVelocity = gravVelocityPointer;
+                    elapsedTime = 0;
+                }
+                else
+                {
+                    position = nextPosition;
+                    direction = new Vector2(0, -1);
+                }
+
+            CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64);
+            //}
 
             //time = (float)timer.TotalSeconds;
             //time = 0.1f;
@@ -100,12 +131,25 @@ namespace GameDevProject.GameObjects
             //    position += gravVelocity * elapsedTime;
             //}
 
-            gravVelocity += grav * elapsedTime;
-            position += gravVelocity * elapsedTime;
+            //gravVelocity += grav * elapsedTime;
+            //position += gravVelocity * elapsedTime;
 
             //Debug.WriteLine(position);
 
-            CollisionRectangle = new Rectangle((int)position.X, (int)position.Y, 32, 64);
+
+            //if (isTouchingGround)
+            //{
+            //    //startTime = DateTime.Now;
+            //    gravVelocity = new Vector2(0, 10);
+            //    elapsedTime = 0;
+            //    //touchChange = !touchChange;
+            //}
+
+            //if (!isTouchingGround)
+            //{
+            //    gravVelocity += grav * elapsedTime;
+            //    position += gravVelocity * elapsedTime;
+            //}
 
             animationManager.Update(direction);
             texture = animationManager.texture;
@@ -117,6 +161,21 @@ namespace GameDevProject.GameObjects
         public void Draw(SpriteBatch spriteBatch)
         {
             if (texture != null && animation != null) spriteBatch.Draw(texture, position, animation.currentFrame.sourceRectangle, Color.White);
+        }
+
+        public List<Tile> GetCollidingTiles(Rectangle NextCollisionRectangle)
+        {
+            List<Tile> tiles = new List<Tile>();
+
+            foreach (Tile tile in Tiles)
+            {
+                if (collisionDetector.collision(NextCollisionRectangle, tile.CollisionRectangle))
+                {
+                    tiles.Add(tile);
+                    if (tile.position.Y > position.Y) floorTile = tile;
+                }
+            }
+            return tiles;
         }
     }
 }

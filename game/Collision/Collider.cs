@@ -22,7 +22,7 @@ namespace GameDevProject.Collision
             if (tile.position.Y > Player.position.Y)
             {
                 //Player.position = new Vector2(Player.position.X, tile.position.Y - 64);
-                y = tile.position.Y - 64;
+                y = tile.position.Y - Player.CollisionRectangle.Height;
                 Player.isTouchingGround = true;
 
                 //if (tile.position.X > Player.position.X + 32 || tile.position.X + 32 < Player.position.X)
