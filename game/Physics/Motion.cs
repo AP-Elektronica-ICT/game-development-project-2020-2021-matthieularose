@@ -31,6 +31,8 @@ namespace GameDevProject.Physics
 
         public void Perform(GameTime gameTime, Vector2 forceGO)
         {
+            isTouchingGround = false;
+
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100;
 
             gravitationalPull += gravity.Acceleration * elapsedTime;
@@ -56,22 +58,11 @@ namespace GameDevProject.Physics
             float x = nextPosition.X;
             float y = nextPosition.Y;
 
-            isTouchingGround = false;
-
             if (tiles.Count > 0)
             {
                 foreach (Tile tile in tiles)
                 {
-                    if (tile.Position.Y > nextPosition.Y)
-                    {
-                        y = tile.Position.Y - 64;
-                        isTouchingGround = true;
-                    }
-                    else if (tile.Position.Y < nextPosition.Y)
-                    {
-                        y = tile.Position.Y + 32;
-                    }
-                    else
+                    if (tile.Position.Y >= nextPosition.Y && tile.Position.Y + 32 <= nextPosition.Y + 64)
                     {
                         if (tile.Position.X > nextPosition.X)
                         {
@@ -81,6 +72,15 @@ namespace GameDevProject.Physics
                         {
                             x = tile.Position.X + 33;
                         }
+                    }
+                    else if (tile.Position.Y > nextPosition.Y)
+                    {
+                        y = tile.Position.Y - 64;
+                        isTouchingGround = true;
+                    }
+                    else if (tile.Position.Y < nextPosition.Y)
+                    {
+                        y = tile.Position.Y + 32;
                     }
                 }
             }
