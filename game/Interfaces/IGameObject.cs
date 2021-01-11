@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDevProject.Interfaces
 {
-    public interface IGameObject
+    public interface IGameObject : ICollision
     {
-        void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
+        public Vector2 Position { get; set; }
+
+        public void Update(GameTime gameTime);
+        public void Draw(SpriteBatch spriteBatch);
     }
 }
