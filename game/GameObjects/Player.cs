@@ -6,15 +6,61 @@ using System.Diagnostics;
 using GameDevProject.Interfaces;
 using GameDevProject.Animation;
 using GameDevProject.Commands;
-using GameDevProject.Collision;
+using GameDevProject.Input;
 using GameDevProject.Physics;
 using System.Collections.Generic;
 using GameDevProject.GameObjects.World;
 
 namespace GameDevProject.GameObjects
 {
-    public class Player : IGameObject, ITransform, ICollision
+    public class Player : GameObject
     {
+        Texture2D texture;
+        SpriteAnimation animation;
+        public IAnimationManager animationManager;
+
+        private IReadInput inputReader;
+
+        private Motion motion;
+
+        //TEMP
+        List<GameObject> gameObjects;
+
+        public override Vector2 Position { get; set; } = new Vector2(300, 200);
+        public override Rectangle CollisionRectangle { get; set; }
+
+        public Player(IReadInput inputReader, List<Tile> gameObjects)
+        {
+            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 64);
+
+            this.inputReader = inputReader;
+
+            motion = new Motion(this, gameObjects);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            var direction = inputReader.ReadInput();
+            motion.Perform(gameTime, direction);
+
+            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 64);
+
+            animationManager.Update(direction);
+            texture = animationManager.texture;
+            animation = animationManager.animation;
+
+            animation.Update(gameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (texture != null && animation != null) spriteBatch.Draw(texture, Position, animation.currentFrame.sourceRectangle, Color.White);
+        }
+
+    }
+}
+
+/*
         Texture2D texture;
         SpriteAnimation animation;
 
@@ -26,11 +72,12 @@ namespace GameDevProject.GameObjects
         private IMoveCommand runCommand = new RunCommand();
         private IMoveCommand jumpCommand = new JumpCommand();
 
-        public Collider collider;
+        //public Collider collider;
 
-        private Gravity gravity = new Gravity();
+        //private Gravity gravity = new Gravity();
 
         public Vector2 position { get; set; }
+
         public Rectangle CollisionRectangle { get; set; }
 
         public Vector2 runVelocity = new Vector2(4, 0);
@@ -176,6 +223,4 @@ namespace GameDevProject.GameObjects
                 }
             }
             return tiles;
-        }
-    }
-}
+        }*/

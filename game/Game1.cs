@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using GameDevProject;
 using GameDevProject.Animation;
 using GameDevProject.Background;
-using GameDevProject.Collision;
 using GameDevProject.GameObjects;
 using GameDevProject.GameObjects.World;
 using GameDevProject.Input;
@@ -34,7 +34,7 @@ namespace GameDev_Project
         private SpriteBatch _spriteBatch;
 
         //CollisionDetector collisionDetector;
-        CollisionManager collisionManager;
+        //CollisionManager collisionManager;
 
         /*---TEXTURES---*/
         private Texture2D idleTextureR;
@@ -106,7 +106,7 @@ namespace GameDev_Project
         {
             GraphicsDevice.Clear(Color.White);
 
-            _spriteBatch.Begin(transformMatrix: Matrix.CreateTranslation(- player.position.X + cameraOffsetX, 0, 0));
+            _spriteBatch.Begin(transformMatrix: Matrix.CreateTranslation(- player.Position.X + cameraOffsetX, 0, 0));
 
             background.Draw(_spriteBatch);
 

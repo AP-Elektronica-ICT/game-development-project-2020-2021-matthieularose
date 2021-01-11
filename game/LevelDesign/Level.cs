@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using GameDevProject.Collision;
 using GameDevProject.GameObjects;
 using GameDevProject.GameObjects.World;
 using Microsoft.Xna.Framework;
