@@ -4,17 +4,10 @@ using Microsoft.Xna.Framework;
 
 namespace GameDevProject.Physics
 {
-    public class Gravity
+    public class Gravity : Force
     {
-        private Vector2 gravity = new Vector2(0, 5);
-        //private Vector2 velocity = new Vector2(0, 2);
-        //private Vector2 acceleration = new Vector2(0, 9.8f);
-
-        public void Pull(ITransform transform, GameTime gameTime)
-        {
-            //int elapsedTime = (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            transform.position += gravity;
-        }
+        //Voor simpliciteit geef ik in Direction ook al ineens een velocity
+        public override Vector2 Direction { get; set; } = new Vector2(0, 10);
+        public override Vector2 Acceleration { get; set; } = new Vector2(0, 9.81f);
     }
 }
