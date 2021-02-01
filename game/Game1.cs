@@ -187,6 +187,6 @@ namespace GameDev_Project
  * Tileset met tegengestelde hoeken
  * collision bug - player kan op alle tiles lopen ipv enkel de bovenste rij
  * Sound
- * Wanneer ja al springend van richting veranderd, veranderd animatie niet mee
+ * -----Wanneer ja al springend van richting veranderd, veranderd animatie niet mee?
  * 
  */

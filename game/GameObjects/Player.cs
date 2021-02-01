@@ -24,14 +24,15 @@ namespace GameDevProject.GameObjects
         private Motion motion;
 
         //TEMP
-        List<GameObject> gameObjects;
+        //List<GameObject> gameObjects;
 
-        public override Vector2 Position { get; set; } = new Vector2(300, 200);
+        public override Vector2 Position { get; set; }
         public override Rectangle CollisionRectangle { get; set; }
 
         public Player(IReadInput inputReader, List<Tile> gameObjects)
         {
-            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 64);
+            Position = new Vector2(350, 352);
+            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 38, 64);
 
             this.inputReader = inputReader;
 
@@ -43,7 +44,7 @@ namespace GameDevProject.GameObjects
             var direction = inputReader.ReadInput();
             motion.Perform(gameTime, direction);
 
-            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 32, 64);
+            CollisionRectangle = new Rectangle((int)Position.X, (int)Position.Y, 38, 64);
 
             animationManager.Update(direction);
             texture = animationManager.texture;
