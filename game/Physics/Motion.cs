@@ -54,12 +54,7 @@ namespace GameDevProject.Physics
 
             float playerLeft = nextPosition.X;
             float playerRight = nextPosition.X + 38;
-            float playerTop = nextPosition.Y;
             float playerBottom = nextPosition.Y + 64;
-
-            float collisionX = nextPosition.X;
-            float collisionY = nextPosition.Y;
-
 
             isTouchingGround = false;
 
