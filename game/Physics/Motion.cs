@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GameDevProject.GameObjects.World;
+using GameDevProject.Input;
+using GameDevProject.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace GameDevProject.Physics
@@ -17,6 +20,7 @@ namespace GameDevProject.Physics
 
         //private List<GameObject> gameObjects = LevelManager.gameObjects (static value) - player
         private List<Tile> gameObjects;
+        private IReadInput inputReader;
 
 
         public Motion(GameObject gameObject, List<Tile> gameObjects)
@@ -27,21 +31,34 @@ namespace GameDevProject.Physics
             currentPosition = gameObject.Position;
 
             this.gameObjects = gameObjects;
+
+            inputReader = new KeyboardInput();
         }
 
         public void Perform(GameTime gameTime, Vector2 forceGO)
         {
-            isTouchingGround = false;
+            //isTouchingGround = false;
 
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100;
 
             gravitationalPull += gravity.Acceleration * elapsedTime;
 
-            nextPosition += forceGO;
+            nextPosition = gameObject.Position;
             nextPosition += gravitationalPull * elapsedTime;
+            nextPosition += forceGO;
 
-            nextPosition = CollisionPrevention();
+            //List<Tile> tiles = GetCollidingTiles(new Rectangle((int)nextPosition.X, (int)nextPosition.Y, 38, 64));
+
+            nextPosition = CollisionPrevention(GetCollidingTiles(new Rectangle((int)nextPosition.X, (int)nextPosition.Y, 38, 64)));
             gameObject.Position = nextPosition;
+
+            //Debug.WriteLine(isTouchingGround);
+            /*
+             * TODO: 
+             * jump and run force
+             * Cooldown for jump
+             * Fix isTouchingGround
+             */
 
             if (isTouchingGround)
             {
@@ -51,39 +68,188 @@ namespace GameDevProject.Physics
         }
 
         //TEMP
-        public Vector2 CollisionPrevention()
+        public Vector2 CollisionPrevention(List<Tile> tiles)
         {
-            List<Tile> tiles = GetCollidingTiles(new Rectangle((int)nextPosition.X, (int)nextPosition.Y, 32, 64));
-
             float x = nextPosition.X;
             float y = nextPosition.Y;
+
+            float playerLeft = nextPosition.X;
+            float playerRight = nextPosition.X + 38;
+            float playerTop = nextPosition.Y;
+            float playerBottom = nextPosition.Y + 64;
+
+            float collisionX = nextPosition.X;
+            float collisionY = nextPosition.Y;
+
+
+            isTouchingGround = false;
 
             if (tiles.Count > 0)
             {
                 foreach (Tile tile in tiles)
                 {
-                    if (tile.Position.Y >= nextPosition.Y && tile.Position.Y + 32 <= nextPosition.Y + 64)
+                    float tileTop = tile.Position.Y;
+                    float tileBottom = tile.Position.Y + 32;
+                    float tileLeft = tile.Position.X;
+                    float tileRight = tile.Position.X + 32;
+
+
+                    //if (tile.tileType == TileType.Floor)
+                    //{
+                    //    if (playerBottom > tileTop)
+                    //    {
+                    //        y = tileTop - 64;
+                    //        isTouchingGround = true;
+                    //    }
+                    //    else if (playerTop < tileBottom)
+                    //    {
+                    //        y = tileBottom;
+                    //    }
+                    //}
+                    //else if (tile.tileType == TileType.Wall)
+                    //{
+                    //    if (playerRight > tileLeft)
+                    //    {
+                    //        x = tileLeft - 39;
+                    //    }
+                    //    if (playerLeft < tileRight)
+                    //    {
+                    //        x = tileRight + 1;
+                    //    }
+                    //}
+
+
+                    //if ((playerRight > tileLeft && playerRight < tileRight) || (playerLeft > tileLeft && playerLeft < tileRight))
+                    //{
+                    //    if (playerBottom > tileTop)
+                    //    {
+                    //        y = tileTop - 64;
+                    //        isTouchingGround = true;
+                    //    }
+                    //}
+
+                    if (playerRight - 5 > tileLeft && playerLeft + 5 < tileRight)
                     {
-                        if (tile.Position.X > nextPosition.X)
+                        //if (playerBottom > tileTop)
+                        //{
+                        //    y = tileTop - 64;
+                        //    isTouchingGround = true;
+                        //}
+                        if (tile.Position.Y > nextPosition.Y)
                         {
-                            x = tile.Position.X - 33;
+                            if (playerBottom > tileTop)
+                            {
+                                y = tileTop - 64;
+                                isTouchingGround = true;
+                            }
                         }
-                        if (tile.Position.X < nextPosition.X)
+                        else if (tile.Position.Y < nextPosition.Y)
                         {
-                            x = tile.Position.X + 33;
+                            y = tileBottom;
                         }
                     }
-                    else if (tile.Position.Y > nextPosition.Y)
+
+                    //else
+                    //{
+                    //    if (playerRight > tileLeft)
+                    //    {
+                    //        x = tileLeft - 38;
+                    //    }
+                    //    if (playerLeft < tileRight)
+                    //    {
+                    //        x = tileRight;
+                    //    }
+                    //}
+                }
+
+                if (!isTouchingGround)
+                {
+                    foreach (Tile tile in tiles)
                     {
-                        y = tile.Position.Y - 64;
-                        isTouchingGround = true;
-                    }
-                    else if (tile.Position.Y < nextPosition.Y)
-                    {
-                        y = tile.Position.Y + 32;
+                        float tileTop = tile.Position.Y;
+                        float tileBottom = tile.Position.Y + 32;
+                        float tileLeft = tile.Position.X;
+                        float tileRight = tile.Position.X + 32;
+
+                        if (playerRight - 5 < tileLeft)
+                        {
+                            x = tileLeft - 38;
+                        }
+                        if (playerLeft + 5 > tileRight)
+                        {
+                            x = tileRight;
+                        }
                     }
                 }
+                //foreach (Tile tile in tiles)
+                //{
+                //    float tileTop = tile.Position.Y;
+                //    float tileBottom = tile.Position.Y + 32;
+                //    float tileLeft = tile.Position.X;
+                //    float tileRight = tile.Position.X + 32;
+
+                //    //if (playerRight - 5 > tileLeft && playerLeft + 5 < tileRight)
+                //    //{
+                //    //    if (playerBottom > tileTop)
+                //    //    {
+                //    //        //y = tileTop - 64;
+                //    //        //isTouchingGround = true;
+                //    //        tileUnder = true;
+                //    //        collisionY = tileTop - 64;
+                //    //    }
+                //    //    if (playerTop < tileBottom)
+                //    //    {
+                //    //        tileAbove = true;
+                //    //        collisionY = tileBottom;
+                //    //    }
+                //    //}
+                //    //else
+                //    //{
+                //    //    //x = tileRight;
+                //    //    if (playerRight - 5 < tileLeft)
+                //    //    {
+                //    //        collisionX = tileLeft;
+                //    //        tileL = true;
+                //    //    }
+                //    //    if (playerLeft + 5 > tileRight)
+                //    //    {
+                //    //        collisionX = tileRight - 38;
+                //    //        tileR = true;
+                //    //    }
+                //    //}
+
+
+
+                //    /*
+                //    if (tile.Position.Y > nextPosition.Y)
+                //    {
+                //        if (tile.Position.Y + 32 < nextPosition.Y + 64)
+                //        {
+                //            //TODO: check floor
+                //            if (tile.Position.X > nextPosition.X)
+                //            {
+                //                x = tile.Position.X - 39;
+                //            }
+                //            if (tile.Position.X < nextPosition.X)
+                //            {
+                //                x = tile.Position.X + 33;
+                //            }
+                //            isTouchingGround = false;
+                //        }
+                //        else
+                //        {
+                //            y = tile.Position.Y - 64;
+                //            isTouchingGround = true;
+                //        }
+                //        //isTouchingGround = false;
+                //    }
+                //    else if (tile.Position.Y < nextPosition.Y)
+                //    {
+                //        y = tile.Position.Y + 32;
+                //    }*/
+                //}
             }
+
             return new Vector2(x, y);
         }
 
@@ -103,72 +269,3 @@ namespace GameDevProject.Physics
         }
     }
 }
-
-/*if (direction != new Vector2(0,0))
-            //{
-                Vector2 nextPosition = position;
-                if (direction.X != 0)
-                {
-                    nextPosition += (direction * runVelocity);
-
-                    //position += direction * runVelocity;
-                }
-                if (direction.Y != 0) //<
-                {
-                    nextPosition += (direction * jumpVelocity);
-
-                    //position += direction * jumpVelocity;
-                    //isTouchingGround = false;
-                }
-
-            gravVelocity += grav * elapsedTime;
-            nextPosition += gravVelocity * elapsedTime;
-
-
-            if (GetCollidingTiles(new Rectangle((int)nextPosition.X, (int)nextPosition.Y, 32, 64)).Count > 0)
-                {
-                    //collider.OnCollisionEnter();
-                    if (floorTile != null) position = new Vector2(nextPosition.X, floorTile.position.Y - 64);
-                    gravVelocity = gravVelocityPointer;
-                    elapsedTime = 0;
-                }
-                else
-                {
-                    position = nextPosition;
-                    direction = new Vector2(0, -1);
-                }*/
-
-
-/*float x = Player.position.X;
-            float y = Player.position.Y;
-
-            if (tile.position.Y > Player.position.Y)
-            {
-                //Player.position = new Vector2(Player.position.X, tile.position.Y - 64);
-                y = tile.position.Y - Player.CollisionRectangle.Height;
-                Player.isTouchingGround = true;
-
-                //if (tile.position.X > Player.position.X + 32 || tile.position.X + 32 < Player.position.X)
-                //    Player.isTouchingGround = false;
-                //else Player.isTouchingGround = true;
-            }
-            else if (tile.position.Y < Player.position.Y)
-            {
-                //Player.position = new Vector2(Player.position.X, tile.position.Y + 32);
-                y = tile.position.Y + 32;
-            }
-            else
-            {
-                if (tile.position.X > Player.position.X)
-                {
-                    //Player.position = new Vector2(tile.position.X - 64, Player.position.Y);
-                    x = tile.position.X - 33;
-                }
-                if (tile.position.X < Player.position.X)
-                {
-                    //Player.position = new Vector2(tile.position.X + 64, Player.position.Y);
-                    x = tile.position.X + 33;
-                }
-            }
-
-            Player.position = new Vector2(x, y);*/

@@ -4,6 +4,8 @@ using GameDevProject;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+public enum TileType { Floor, Wall}
+
 namespace GameDevProject.GameObjects.World
 {
     public class Tile : GameObject
@@ -14,12 +16,15 @@ namespace GameDevProject.GameObjects.World
         public override Vector2 Position { get; set; }
         public override Rectangle CollisionRectangle { get; set; }
 
-        public Tile(Texture2D text, Vector2 pos, Rectangle rectangle)
+        public TileType tileType { get; set; }
+
+        public Tile(Texture2D text, Vector2 pos, Rectangle rectangle, TileType type)
         {
             texture = text;
             Position = pos;
             TextureRectangle = rectangle;
             CollisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 32, 32);
+            tileType = type;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -23,11 +23,11 @@ namespace GameDevProject.GameObjects
 
         private Motion motion;
 
-        //TEMP
-        //List<GameObject> gameObjects;
-
         public override Vector2 Position { get; set; }
         public override Rectangle CollisionRectangle { get; set; }
+
+        public bool dead;
+        public bool finishedLevel;
 
         public Player(IReadInput inputReader, List<Tile> gameObjects)
         {
@@ -37,6 +37,9 @@ namespace GameDevProject.GameObjects
             this.inputReader = inputReader;
 
             motion = new Motion(this, gameObjects);
+
+            dead = false;
+            finishedLevel = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -51,13 +54,15 @@ namespace GameDevProject.GameObjects
             animation = animationManager.animation;
 
             animation.Update(gameTime);
+
+            if (Position.Y > 450) dead = true;
+            if (Position.X > 6500) finishedLevel = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (texture != null && animation != null) spriteBatch.Draw(texture, Position, animation.currentFrame.sourceRectangle, Color.White);
         }
-
     }
 }
 

@@ -8,11 +8,10 @@ namespace GameDevProject.States
     public class Button : Component
     {
         private MouseState currentMouse;
-        private SpriteFont font;
         private bool isHovering;
         private MouseState previousMouse;
-        private Texture2D texture;
 
+        private Texture2D texture;
 
         public event EventHandler Click;
         public bool Clicked { get; private set; }
@@ -30,10 +29,9 @@ namespace GameDevProject.States
         public string Text { get; set; }
 
 
-        public Button(Texture2D texture, SpriteFont font)
+        public Button(Texture2D texture)
         {
             this.texture = texture;
-            this.font = font;
 
             PenColour = Color.Black;
         }
@@ -45,14 +43,6 @@ namespace GameDevProject.States
             if (isHovering) colour = Color.Gray;
 
             spriteBatch.Draw(texture, Rectangle, colour);
-
-            if (!string.IsNullOrEmpty(Text))
-            {
-                var x = (Rectangle.X + (Rectangle.Width / 2)) - (font.MeasureString(Text).X / 2);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (font.MeasureString(Text).Y / 2);
-
-                spriteBatch.DrawString(font, Text, new Vector2(x, y), PenColour);
-            }
         }
 
         public override void Update(GameTime gameTime)

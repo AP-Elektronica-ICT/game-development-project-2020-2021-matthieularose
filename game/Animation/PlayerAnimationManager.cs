@@ -46,7 +46,6 @@ namespace GameDevProject.Animation
                 }
                 else if (direction.Y < 0)
                 {
-                    //Fall
                     texture = jumpTextureR;
                     animation = jumpAnimation;
                 }
@@ -66,7 +65,6 @@ namespace GameDevProject.Animation
                 }
                 else if (direction.Y < 0)
                 {
-                    //Fall
                     texture = jumpTextureL;
                     animation = jumpAnimation;
                 }
@@ -87,7 +85,6 @@ namespace GameDevProject.Animation
                     }
                     else if (direction.Y < 0)
                     {
-                        //Fall
                         texture = jumpTextureR;
                         animation = jumpAnimation;
                     }
@@ -106,7 +103,6 @@ namespace GameDevProject.Animation
                     }
                     else if (direction.Y < 0)
                     {
-                        //Fall
                         texture = jumpTextureL;
                         animation = jumpAnimation;
                     }

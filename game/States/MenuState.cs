@@ -21,14 +21,11 @@ namespace GameDevProject.States
             Texture2D lvl1ButtonTexture = Texture2D.FromStream(graphicsDevice, fileStream);
             fileStream = new FileStream(dir + "controls/lvl2.png", FileMode.Open);
             Texture2D lvl2ButtonTexture = Texture2D.FromStream(graphicsDevice, fileStream);
-            //fileStream = new FileStream(dir + "Fonts/Font", FileMode.Open);
-            //SpriteFont buttonFont = SpriteFont.FromStream(graphicsDevice, fileStream);
-            //SpriteFont buttonFont = 
 
             //background = new ParallaxBackground(backgroundTextures);
             //background.Initialize();
 
-            Button lvl1Button = new Button(lvl1ButtonTexture, null)
+            Button lvl1Button = new Button(lvl1ButtonTexture)
             {
                 Position = new Vector2(300, 200),
                 Text = "",
@@ -36,7 +33,7 @@ namespace GameDevProject.States
 
             lvl1Button.Click += lvl1Button_Click;
 
-            Button lvl2Button = new Button(lvl2ButtonTexture, null)
+            Button lvl2Button = new Button(lvl2ButtonTexture)
             {
                 Position = new Vector2(300, 300),
                 Text = ""
