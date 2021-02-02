@@ -7,6 +7,9 @@ namespace GameDevProject
 {
     public class TextureManager
     {
+        //MGCB Editor doesn't work on latest version of MacOS
+        string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/";
+
         public Texture2D idleTextureR;
         public Texture2D idleTextureL;
         public Texture2D runTextureR;
@@ -18,18 +21,19 @@ namespace GameDevProject
 
         public List<Texture2D> backgroundTextures = new List<Texture2D>();
 
+        public Texture2D lvl1ButtonTexture;
+        public Texture2D lvl2ButtonTexture;
+
         private GraphicsDevice GraphicsDevice;
 
         public TextureManager(GraphicsDevice graphicsDevice)
         {
             GraphicsDevice = graphicsDevice;
+            GetTextures();
         }
 
         private void GetTextures()
         {
-            //MGCB Editor doesn't work on latest version of MacOS
-            string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/";
-
             //Player
             FileStream fileStream = new FileStream(dir + "sprites/idleRight.png", FileMode.Open);
             idleTextureR = Texture2D.FromStream(GraphicsDevice, fileStream);
@@ -71,6 +75,12 @@ namespace GameDevProject
 
             fileStream = new FileStream(dir + "backgrounds/plx-5.png", FileMode.Open);
             backgroundTextures.Add(Texture2D.FromStream(GraphicsDevice, fileStream));
+
+            //Button Textures
+            fileStream = new FileStream(dir + "controls/lvl1.png", FileMode.Open);
+            lvl1ButtonTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream = new FileStream(dir + "controls/lvl2.png", FileMode.Open);
+            lvl2ButtonTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
 
             fileStream.Dispose();
         }

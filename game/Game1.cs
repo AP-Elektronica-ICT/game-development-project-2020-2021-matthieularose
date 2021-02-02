@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 /*
- * Om de textures te laden, moet u de directory path van de content nog even aanpassen (in de GetTextures-functie onderaan dit bestand).
+ * Om de textures te laden, moet u de directory path van de content nog even aanpassen (in de TextureManager klasse).
  * Ik moest dit zo doen, omdat de MGCB Editor niet werkt voor de laatste versie van MacOS.
  */
 
@@ -28,6 +28,8 @@ namespace GameDev_Project
 
         private State currentState;
         private State nextState;
+
+        TextureManager textureManager;
 
         public void ChangeState(State state)
         {
@@ -50,7 +52,9 @@ namespace GameDev_Project
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            textureManager = new TextureManager(GraphicsDevice);
+
+            currentState = new MenuState(this, _graphics.GraphicsDevice, Content, textureManager);
         }
 
         protected override void Update(GameTime gameTime)
@@ -84,7 +88,6 @@ namespace GameDev_Project
 
 /*TODO:
  * 
- * TextureLoader
  * JSONParser + levels in JSON files opslaan
  * Parallax
  * Sound

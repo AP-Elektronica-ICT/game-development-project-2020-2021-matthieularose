@@ -12,31 +12,19 @@ namespace GameDevProject.States
     public class MenuState : State
     {
         public List<Component> components;
-        //ParallaxBackground background;
 
-        public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
+        public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content, TextureManager textureManager) : base(game, graphicsDevice, content, textureManager)
         {
-            string dir = "/Users/matthieu/School/2EA-Cloud/GameDev/game-development-project-2020-2021-matthieularose/game/Content/";
-            FileStream fileStream = new FileStream(dir + "controls/lvl1.png", FileMode.Open);
-            Texture2D lvl1ButtonTexture = Texture2D.FromStream(graphicsDevice, fileStream);
-            fileStream = new FileStream(dir + "controls/lvl2.png", FileMode.Open);
-            Texture2D lvl2ButtonTexture = Texture2D.FromStream(graphicsDevice, fileStream);
-
-            //background = new ParallaxBackground(backgroundTextures);
-            //background.Initialize();
-
-            Button lvl1Button = new Button(lvl1ButtonTexture)
+            Button lvl1Button = new Button(textureManager.lvl1ButtonTexture)
             {
                 Position = new Vector2(300, 200),
-                Text = "",
             };
 
             lvl1Button.Click += lvl1Button_Click;
 
-            Button lvl2Button = new Button(lvl2ButtonTexture)
+            Button lvl2Button = new Button(textureManager.lvl2ButtonTexture)
             {
                 Position = new Vector2(300, 300),
-                Text = ""
             };
 
             lvl2Button.Click += lvl2Button_Click;
@@ -50,19 +38,17 @@ namespace GameDevProject.States
 
         private void lvl1Button_Click(object sender, EventArgs e)
         {
-            game.ChangeState(new GameState(game, graphicsDevice, content, 1));
+            game.ChangeState(new GameState(game, graphicsDevice, content, textureManager, 1));
         }
 
         private void lvl2Button_Click(object sender, EventArgs e)
         {
-            game.ChangeState(new GameState(game, graphicsDevice, content, 2));
+            game.ChangeState(new GameState(game, graphicsDevice, content, textureManager, 2));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-
-            //background.Draw(spriteBatch);
 
             foreach (var component in components)
             {
